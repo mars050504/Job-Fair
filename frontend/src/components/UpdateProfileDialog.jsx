@@ -21,7 +21,8 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         phoneNumber: user?.phoneNumber,
         bio: user?.profile?.bio,
         skills: user?.profile?.skills?.map(skill => skill),
-        file: user?.profile?.resume
+        file: user?.profile?.resume,
+        profilePhoto: user?.profile?.profilePhoto
     });
     const dispatch = useDispatch();
 
@@ -33,6 +34,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         const file = e.target.files?.[0];
         setInput({ ...input, file })
     }
+    const photoChangeHandler = (e) => {
+        const profilePhoto = e.target.files?.[0];
+        setInput({ ...input, profilePhoto });
+    };
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -44,6 +49,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         formData.append("skills", input.skills);
         if (input.file) {
             formData.append("file", input.file);
+        }
+        if (input.profilePhoto) {
+            formData.append("profilePhoto", input.profilePhoto);
         }
 
         try {
@@ -140,10 +148,21 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                                     className="col-span-3"
                                 />
                             </div>
+                            <div className='grid grid-cols-4 items-center gap-4'>
+                                <Label htmlFor="profilePhoto" className='text-right'>Photo Profile</Label>
+                                <Input
+                                    id="profilePhoto"
+                                    name="profilePhoto"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={photoChangeHandler}
+                                    className="col-span-3"
+                                />
+                            </div>
                         </div>
                         <DialogFooter>
                             {
-                                loading ? <Button> <Loader2 className='mr-2 h-4 animate-spin' />please wait</Button> : <Button type="submit" className="w-full my-4 cursor-pointer">Update</Button>
+                                loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4 bg-[#6300B3] hover:bg-[#5b30a6] text-white cursor-pointer">Update</Button>
                             }
                         </DialogFooter>
                     </form>
